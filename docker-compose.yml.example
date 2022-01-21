@@ -1,0 +1,26 @@
+version: '3.3'
+services:
+  rdp2tcp:
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "44445:22"
+    container_name: rdp2tcp
+    image: 'gederico/rdp2tcp:v1.0.0'
+    tty: true
+    volumes:
+      - './log:/log'
+    networks:
+      vpnjumphost:
+    environment:
+            - USERNAME=<RDP_USERNAME>
+            - PASSWORD=<RDP_PASSWORD>
+            - HOST=<RDP_IP>
+            - DOMAIN=<RDP_DOMAIN>
+            - REMOTEIP=<TUNNEL_DEST_IP> #IP for the destination to be accessed via RDP tunnel Ex:SSH jumphost
+            - REMOTEPORT=<TUNNEL_DEST_PORT> #Port for destination, usually 22
+            - LOCALPORT=22
+networks:
+    vpnjumphost:
+        external: true
